@@ -25,7 +25,6 @@ export default function Navbar() {
             <div className=" container mx-auto p-4 flex flex-col xl:flex-row justify-between items-center">
                 <div className="flex flex-row justify-between">
                     <div className="flex flex-row justify-center items-center gap-1">
-                        {/* <FaRegNoteSticky /> */}
                         <FaNoteSticky />
                         <p>Your Notes</p>
                     </div>

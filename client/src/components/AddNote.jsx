@@ -63,7 +63,6 @@ export default function AddNote(props) {
                     </div>
                     <div className="flex items-center justify-between">
                         <button className=" bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
-                            {/* <button className={`${(note.title.length < 3 || note.description.length < 5) ? " bg-blue-300" : "bg-blue-500 hover:bg-blue-700" } text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline`} type="submit"> */}
                             Add Note
                         </button>
                     </div>

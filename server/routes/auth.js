@@ -8,21 +8,18 @@ const jwt = require('jsonwebtoken');
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
-// Route 1: create a user using post "/api/auth/createuser". doesn't require Auth (no login required)
 router.post("/createuser", [
     body('name', 'Enter valid name').isLength({ min: 3 }),
     body('email', 'Enter valid email').isEmail(),
     body('password', 'Enter valid password').isLength({ min: 5 }),
 ], async (req, res) => {
-    // If there is any errors, return Bad request and the errors 
-    // console.log(req.body);
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() })
     }
 
     try {
-        // check if user is already exists 
+
         let user = await User.findOne({ email: req.body.email });
         if (user) {
             success = false
@@ -32,7 +29,6 @@ router.post("/createuser", [
         const salt = await bcrypt.genSalt(10);
         const secPass = await bcrypt.hash(req.body.password, salt);
 
-        // else creating user and sending data to server to save
         user = await User.create({
             name: req.body.name,
             email: req.body.email,
@@ -55,7 +51,6 @@ router.post("/createuser", [
 })
 
 
-// Route 2: create a user using post "/api/auth/login". register required 
 router.post("/login", [
     body('email', "Enter valid Email").isEmail(),
     body('password', "Pssword cannot be blank").exists(),
@@ -94,7 +89,6 @@ router.post("/login", [
 
 })
 
-// ROUTE 3: Get logdedin User Details using: POST "/api/auth/getuser". login required 
 router.post("/getuser", fetchuser, async (req, res) => {
     try {
         const userId = req.user.id;

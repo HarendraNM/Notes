@@ -4,7 +4,7 @@ const Notes = require('../models/Notes');
 const fetchuser = require('../middleware/fetchuser');
 const { body, validationResult } = require('express-validator');
 
-// ROUTE 1: fetch all notes using: GET "/api/notes/fetchallnotes". login required 
+
 router.get("/fetchallnotes", fetchuser, async (req, res) => {
     try {
         const notes = await Notes.find({ user: req.user.id });
@@ -15,12 +15,11 @@ router.get("/fetchallnotes", fetchuser, async (req, res) => {
     }
 })
 
-// ROUTE 2: Add new notes using: POST "/api/notes/addnote". login required 
+
 router.post("/addnote", fetchuser, [
     body("title", "Enter valid title").isLength({ min: 3 }),
     body("description", "Enter valid description").isLength({ min: 5 }),
 ], async (req, res) => {
-    // console.log(req.body);
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
@@ -38,19 +37,16 @@ router.post("/addnote", fetchuser, [
     }
 })
 
-// ROUTE 3: Update an existing notes using: POST "/api/notes/updatenote". login required 
 router.put("/updatenote/:id", fetchuser, [
     body("title", "Enter valid Title").isLength({ min: 3 }),
     body("description", "Enter valid description").isLength({ min: 5 }),
 ], async (req, res) => {
-    // console.log(req.body);
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
     try {
         const { title, description, tag } = req.body;
-        // create new note object
         const newNote = {};
         if (title) { newNote.title = title };
         if (description) { newNote.description = description };
@@ -71,14 +67,11 @@ router.put("/updatenote/:id", fetchuser, [
     }
 })
 
-// Route 4: Delete an existing note using: DELETE "/api/notes/deletenote/:id" , login required
 router.delete("/deletenote/:id", fetchuser, async (req, res) => {
     try {
-        // find the note to be delete and delete it
         let note = await Notes.findById(req.params.id);
         if (!note) { return res.status(404).send(" Not Exists") }
         
-        // Allows deletion only if user owns this Note
         if (note.user.toString() !== req.user.id) {
             return res.status(401).send(" Not Allowed ")
         }
